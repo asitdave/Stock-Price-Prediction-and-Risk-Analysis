@@ -1,0 +1,10 @@
+streamlit
+yfinance
+pandas
+numpy
+matplotlib
+statsmodels
+scikit-learn
+tqdm
+# optional but recommended:
+pmdarima
