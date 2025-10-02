@@ -1,0 +1,10 @@
+streamlit
+yfinance==0.2.65
+pandas
+numpy
+matplotlib==3.9.2
+statsmodels
+scikit-learn
+tqdm
+# optional but recommended:
+pmdarima==2.0.4
