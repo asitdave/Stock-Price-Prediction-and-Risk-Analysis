@@ -190,7 +190,7 @@ with st.spinner("Selecting model order..."):
         st.success(f"Grid search selected order: {order}")
 
 # Small safety: ensure d in order matches chosen d
-order = (order[0], d, order[2])
+order = (1, 1, 1) if d == 1 else (order[0], d, order[2])
 st.write(f"Final order used for walk-forward: {order}")
 
 # -------------------------
