@@ -15,35 +15,6 @@ import io
 import warnings
 warnings.filterwarnings("ignore")
 
-# plt.rcParams.update({
-#     'figure.dpi': 300,            # Set the default DPI to 300
-#     'figure.facecolor': 'white',   # Set the default figure facecolor to white
-#     'axes.grid': False,           # Display grid on axes
-#     'grid.color': 'black',        # Set the grid color to black
-#     'grid.linestyle': '--',       # Set the grid line style to dashed
-#     'grid.linewidth': 0.5,        # Set the grid line width to 0.5
-#     'grid.alpha': 0.5,            # Set the grid alpha to 0.5
-#     'xtick.top': True,            # Display ticks on the top of the x-axis
-#     'xtick.bottom': True,         # Display ticks on the bottom of the x-axis
-#     'ytick.left': True,           # Display ticks on the left of the y-axis
-#     'ytick.right': True,          # Display ticks on the right of the y-axis
-#     'xtick.direction': 'in',       # Set the direction of x-axis ticks to 'in'
-#     'ytick.direction': 'in',       # Set the direction of y-axis ticks to 'in'
-#     'font.size': 10,              # Set the font size
-#     'text.usetex': True,          # Enable LaTeX rendering
-#     'font.family': 'serif',       # Font family for text
-#     'font.serif': ['Computer Modern Roman'],  # Font name for serif font (Others: 'Times New Roman', 'Georgia', 'Helvetica', 'Palatino')
-#     'font.weight': 'bold',      # Font weight
-#     'axes.linewidth': 0.25,       # Spine line width
-#     'xtick.major.width': 0.25,    # Major tick line width for x-axis
-#     'xtick.minor.width': 0.25,    # Minor tick line width for x-axis
-#     'ytick.major.width': 0.25,    # Major tick line width for y-axis
-#     'ytick.minor.width': 0.25,     # Minor tick line width for y-axis
-#     'legend.frameon': False,      # Disable legend frame
-# })
-
-
-
 
 st.set_page_config(page_title="Stock Price Forecast", layout="wide")
 
@@ -114,11 +85,34 @@ def future_business_days(start_date, n_days=60):
 # -------------------------
 st.title("Stock Price Forecasting (walk-forward test + future forecast)")
 
+# Initialize the session state variable if it doesn't exist
+if 'run_button' not in st.session_state:
+    st.session_state.run_button = False
+
+TICKERS_LIST = ["AAPL", "MSFT", "GOOGL", "AMZN", "TSLA", "META"]
+
+
 col1, col2 = st.columns([2,1])
 with col1:
+    st.markdown("### Select Ticker")
     ticker = st.text_input("Ticker symbol (yfinance)", value="AAPL")
+
+    
+    # # Dropdown selectbox for tickers
+    # ticker = st.selectbox("Choose a stock ticker:", TICKERS_LIST)
+
+    # Optional URL for full list of tickers
+    st.markdown(
+        "[See full list of tickers on Yahoo Finance](https://finance.yahoo.com/lookup)"
+    )
+
+
     horizon_days = st.number_input("Forecast horizon (days)", min_value=1, max_value=15, value=5)
-    run_button = st.button("Run ARIMA Forecast")
+    # run_button = st.button("Run ARIMA Forecast")
+
+    if st.button("Run Forecast"):
+        st.session_state.run_button = True
+
 with col2:
     st.markdown("**Notes**")
     st.markdown("- Last 6 months are used for out-of-sample testing.")
@@ -127,8 +121,12 @@ with col2:
     st.markdown("- Final model is refit on full data and used to forecast next N business days using SARIMA.")
     st.markdown("- If `pmdarima` is installed, it will be used to suggest (p,d,q). Otherwise a small grid search is used.")
 
-if not run_button:
+# if not run_button:
+#     st.stop()
+if not st.session_state.run_button:
     st.stop()
+
+
 
 # -------------------------
 # Data fetch
@@ -138,7 +136,7 @@ start_required = today - pd.DateOffset(years=11)  # ~11 years to be safe
 df = fetch_close_series(ticker.upper(), start_required.strftime("%Y-%m-%d"), (today + pd.Timedelta(days=1)).strftime("%Y-%m-%d"))
 
 if df is None or df.empty:
-    st.error("No data returned for ticker. Check ticker symbol and internet connection.")
+    st.error("No data returned for ticker. Check yfinance website to verify ticker exists. Check ticker symbol and internet connection.")
     st.stop()
 
 last_date = df.index[-1]
@@ -190,7 +188,7 @@ with st.spinner("Selecting model order..."):
         st.success(f"Grid search selected order: {order}")
 
 # Small safety: ensure d in order matches chosen d
-order = (1, 1, 1) if d == 1 else (order[0], d, order[2])
+order = (order[0], d, order[2])
 st.write(f"Final order used for walk-forward: {order}")
 
 # -------------------------

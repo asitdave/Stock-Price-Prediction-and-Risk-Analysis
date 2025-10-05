@@ -1,7 +1,5 @@
 # Stock Price Prediction and Risk Analysis
 
-
-
 ## Project Overview  
 This project explores stock market data for leading technology companies – Apple (AAPL), Google (GOOGL), Amazon (AMZN), and Microsoft (MSFT).
 Through a combination of statistical analysis, technical indicators, portfolio risk assessment, and predictive modeling, the project aims to:
@@ -33,6 +31,13 @@ Through a combination of statistical analysis, technical indicators, portfolio r
 - **Modeling** statsmodel (ARIMA), tensorflow/keras (LSTM)  
 
 
+### Interactive Web Application
+The accompanying Jupyter Notebook offers a comprehensive walkthrough of stock price exploration, portfolio risk assessment, and forecasting methodologies.
+To make the analysis more interactive and user-friendly, I’ve also developed and hosted a Streamlit web application - which you can access [here](https://asitdave-stock-price-prediction-and-risk-analysis-app.streamlit.app). This app allows users to:
+* Select a stock of their choice and visualize how the model performs over the last six months
+* Forecast future stock prices by specifying the number of days ahead for prediction
+
+This interactive dashboard provides an intuitive way to explore the underlying models and observe their predictive performance in real time.
 
 ## Key Results  
 
