@@ -41,13 +41,13 @@ This interactive dashboard provides an intuitive way to explore the underlying m
 
 ## Key Results  
 
-1. T**rends & Volatility**: Tech stocks generally move together (high positive correlations). Short-term decoupling observed during specific market events (e.g., Microsoft 2024 outage).
+1. **Trends & Volatility**: Tech stocks generally move together (high positive correlations). Short-term decoupling observed during specific market events (e.g., Microsoft 2024 outage).
 2. **Portfolio Performance**:
    * Equally weighted portfolios smooth volatility compared to single stocks
    * Diversification benefits limited due to strong correlations among tech giants
 3. **Predictive Modeling**:
-	* ARIMA provides a simple, interpretable baseline for short-term predictions
-	* LSTM captures overall trends better but lags in sudden price movements
+	* ARIMA provides accurate forecasts for short-term predictions, providing more precise predictions during volatile market movements
+	* LSTM follows the 30-day moving average, capturing overall trends better but lags in sudden price movements
 	* Errors remain within realistic ranges, showing potential for practical forecasting
 
 ---
